@@ -126,7 +126,7 @@
         
         .scroll-content {
             height: 300%; /* Three times the viewport height to accommodate two sections plus buffer */
-            animation: infiniteScroll 30s linear infinite;
+            /* animation: infiniteScroll 30s linear infinite; */ /* Temporarily disabled for testing */
         }
         
         .scroll-content:hover {
@@ -287,7 +287,7 @@
     </div>
 
     <script>
-        // Carousel Logic
+        // Carousel Logic - Fully Automatic for TV Display
         let currentSlide = 0;
         const track = document.querySelector('.carousel-track');
         const slides = document.querySelectorAll('.carousel-item');
@@ -302,49 +302,11 @@
             updateCarousel();
         }
 
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
-        }
-
-        // Auto-advance carousel every 4 seconds
+        // Auto-advance carousel every 4 seconds - fully automatic for TV
         setInterval(nextSlide, 4000);
 
-        // Add touch swipe functionality for mobile
-        let touchstartX = 0;
-        let touchendX = 0;
-
-        const gestureZone = document.querySelector('.carousel-container');
-
-        gestureZone.addEventListener('touchstart', function(event) {
-            touchstartX = event.changedTouches[0].screenX;
-        }, false);
-
-        gestureZone.addEventListener('touchend', function(event) {
-            touchendX = event.changedTouches[0].screenX;
-            handleGesture();
-        }, false); 
-
-        function handleGesture() {
-            if (touchendX < touchstartX) {
-                // Swiped left
-                nextSlide();
-            }
-            if (touchendX > touchstartX) {
-                // Swiped right
-                prevSlide();
-            }
-        }
-
-        // Pause scroll animation on hover
-        const scrollContent = document.querySelector('.scroll-content');
-        scrollContent.addEventListener('mouseenter', () => {
-            scrollContent.style.animationPlayState = 'paused';
-        });
-        
-        scrollContent.addEventListener('mouseleave', () => {
-            scrollContent.style.animationPlayState = 'running';
-        });
+        // Initialize carousel
+        updateCarousel();
     </script>
 </body>
 </html>
