@@ -287,14 +287,36 @@
     </div>
 
     <script>
-        // Carousel Logic - Fully Automatic for TV Display
+        // Carousel Logic - Enhanced for TV Display with debugging
         let currentSlide = 0;
         const track = document.querySelector('.carousel-track');
         const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.carousel-dot');
         const totalSlides = slides.length;
 
+        console.log(`Carousel initialized: ${totalSlides} slides found`);
+
         function updateCarousel() {
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            if (!track) {
+                console.error('Carousel track not found!');
+                return;
+            }
+            
+            // Move the track
+            track.style.transform = `translateX(-${currentSlide * 16.666}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.style.backgroundColor = '#D4AF37';
+                    dot.style.transform = 'scale(1.2)';
+                } else {
+                    dot.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+                    dot.style.transform = 'scale(1)';
+                }
+            });
+            
+            console.log(`Slide changed to: ${currentSlide + 1}/${totalSlides}`);
         }
 
         function nextSlide() {
@@ -302,11 +324,16 @@
             updateCarousel();
         }
 
-        // Auto-advance carousel every 4 seconds - fully automatic for TV
-        setInterval(nextSlide, 4000);
-
-        // Initialize carousel
-        updateCarousel();
+        // Wait for page load then start carousel
+        window.addEventListener('load', () => {
+            console.log('Page loaded, starting carousel');
+            updateCarousel(); // Initialize first slide
+            
+            // Auto-advance carousel every 3 seconds for better visibility on TV
+            setInterval(() => {
+                nextSlide();
+            }, 3000);
+        });
     </script>
 </body>
 </html>
