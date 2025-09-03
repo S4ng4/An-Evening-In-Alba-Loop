@@ -149,6 +149,31 @@
         .pio-section {
             background: linear-gradient(135deg, rgba(60, 36, 20, 0.98) 0%, rgba(128, 0, 32, 0.98) 100%);
         }
+        
+        /* Slideshow indicator dots */
+        .slideshow-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        
+        .slideshow-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .slideshow-dot.active {
+            background-color: #D4AF37;
+            transform: scale(1.3);
+        }
     </style>
 </head>
 
@@ -219,37 +244,49 @@
                             
                             <div class="w-full relative animate-slide-in-right">
                                 <div class="carousel-container rounded-2xl shadow-lg">
-                                    <div class="carousel-track">
+                                    <div class="carousel-track" id="carouselTrack">
                                         <div class="carousel-item">
-                                            <img src="01slide-home.jpg" alt="Pio Cesare Winery 1" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=Pio+Cesare+Winery+1" alt="Pio Cesare Winery 1" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="02slide-home.jpg" alt="Pio Cesare Winery 2" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="https://via.placeholder.com/600x400/800020/FFFFFF?text=Pio+Cesare+Winery+2" alt="Pio Cesare Winery 2" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="03slide-home.jpg" alt="Pio Cesare Winery 3" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="https://via.placeholder.com/600x400/3C2414/FFFFFF?text=Pio+Cesare+Winery+3" alt="Pio Cesare Winery 3" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="04slide-home.jpg" alt="Pio Cesare Winery 4" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="https://via.placeholder.com/600x400/D4AF37/000000?text=Pio+Cesare+Winery+4" alt="Pio Cesare Winery 4" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="05slide-home.jpg" alt="Pio Cesare Winery 5" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="https://via.placeholder.com/600x400/B87333/FFFFFF?text=Pio+Cesare+Winery+5" alt="Pio Cesare Winery 5" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="06slide-home.jpg" alt="Pio Cesare Winery 6" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="https://via.placeholder.com/600x400/F5F5DC/000000?text=Pio+Cesare+Winery+6" alt="Pio Cesare Winery 6" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                     </div>
+                                    
+                                    <!-- Navigation buttons -->
                                     <div class="carousel-nav absolute inset-y-0 flex items-center justify-between w-full px-4">
                                         <button onclick="prevSlide()" class="p-2 bg-white/30 rounded-full text-white backdrop-blur-sm hover:bg-white/50">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                                             </svg>
                                         </button>
-                                        <button onclick="nextSlide()" class="p-2 bg-white/30 rounded-full text-white backdrop-blur-sm hover:bg-white/50">
+                                        <button onclick="nextSlideManual()" class="p-2 bg-white/30 rounded-full text-white backdrop-blur-sm hover:bg-white/50">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                             </svg>
                                         </button>
+                                    </div>
+                                    
+                                    <!-- Slideshow indicator dots -->
+                                    <div class="slideshow-dots" id="slideshowDots">
+                                        <div class="slideshow-dot active" onclick="goToSlide(0)"></div>
+                                        <div class="slideshow-dot" onclick="goToSlide(1)"></div>
+                                        <div class="slideshow-dot" onclick="goToSlide(2)"></div>
+                                        <div class="slideshow-dot" onclick="goToSlide(3)"></div>
+                                        <div class="slideshow-dot" onclick="goToSlide(4)"></div>
+                                        <div class="slideshow-dot" onclick="goToSlide(5)"></div>
                                     </div>
                                 </div>
                             </div>
@@ -287,37 +324,30 @@
     </div>
 
     <script>
-        // Background Slideshow Logic - Fully Automatic for TV Display
+        // Carousel/Slideshow Logic
         let currentSlide = 0;
-        const slides = document.querySelectorAll('.background-slide');
+        const carouselTrack = document.getElementById('carouselTrack');
+        const slides = document.querySelectorAll('.carousel-item');
         const dots = document.querySelectorAll('.slideshow-dot');
         const totalSlides = slides.length;
+        let autoSlideInterval;
 
-        console.log(`Background slideshow initialized: ${totalSlides} slides found`);
+        console.log(`Slideshow initialized: ${totalSlides} slides found`);
 
         function updateSlideshow() {
-            // Hide all slides
-            slides.forEach((slide, index) => {
-                slide.classList.remove('active');
-            });
-            
-            // Show current slide
-            if (slides[currentSlide]) {
-                slides[currentSlide].classList.add('active');
-            }
+            // Move the carousel track
+            const translateX = -currentSlide * 100;
+            carouselTrack.style.transform = `translateX(${translateX}%)`;
             
             // Update dots
             dots.forEach((dot, index) => {
+                dot.classList.remove('active');
                 if (index === currentSlide) {
-                    dot.style.backgroundColor = '#D4AF37';
-                    dot.style.transform = 'scale(1.3)';
-                } else {
-                    dot.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
-                    dot.style.transform = 'scale(1)';
+                    dot.classList.add('active');
                 }
             });
             
-            console.log(`Background slide changed to: ${currentSlide + 1}/${totalSlides}`);
+            console.log(`Slide changed to: ${currentSlide + 1}/${totalSlides}`);
         }
 
         function nextSlide() {
@@ -325,15 +355,50 @@
             updateSlideshow();
         }
 
-        // Wait for page load then start slideshow
-        window.addEventListener('load', () => {
-            console.log('Page loaded, starting background slideshow');
-            updateSlideshow(); // Initialize first slide
-            
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlideshow();
+        }
+
+        function nextSlideManual() {
+            // Reset auto-advance timer when user manually navigates
+            clearInterval(autoSlideInterval);
+            nextSlide();
+            startAutoSlide();
+        }
+
+        function goToSlide(slideIndex) {
+            // Reset auto-advance timer when user manually navigates
+            clearInterval(autoSlideInterval);
+            currentSlide = slideIndex;
+            updateSlideshow();
+            startAutoSlide();
+        }
+
+        function startAutoSlide() {
             // Auto-advance slideshow every 4 seconds
-            setInterval(() => {
+            autoSlideInterval = setInterval(() => {
                 nextSlide();
             }, 4000);
+        }
+
+        // Initialize slideshow when page loads
+        window.addEventListener('load', () => {
+            console.log('Page loaded, starting slideshow');
+            updateSlideshow(); // Initialize first slide
+            startAutoSlide(); // Start automatic slideshow
+        });
+
+        // Optional: Pause auto-advance when user hovers over the carousel
+        const carouselContainer = document.querySelector('.carousel-container');
+        carouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(autoSlideInterval);
+            console.log('Auto-slide paused (mouse hover)');
+        });
+
+        carouselContainer.addEventListener('mouseleave', () => {
+            startAutoSlide();
+            console.log('Auto-slide resumed');
         });
     </script>
 </body>
