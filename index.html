@@ -302,8 +302,8 @@
                 return;
             }
             
-            // Move the track
-            track.style.transform = `translateX(-${currentSlide * 16.666}%)`;
+            // Move the track - each slide is 100% width so we move by 100% increments
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
             
             // Update dots
             dots.forEach((dot, index) => {
