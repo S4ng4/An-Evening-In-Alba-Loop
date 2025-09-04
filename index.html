@@ -174,10 +174,156 @@
             background-color: #D4AF37;
             transform: scale(1.3);
         }
+        
+        /* NEW: Background slideshow styles */
+        .slideshow {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .slideshow-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            animation: imageAnimation 36s infinite;
+            filter: brightness(0.7);
+        }
+        
+        .slideshow-image:nth-child(1) {
+            background-image: url('01slide-home.jpg');
+            animation-delay: 0s;
+        }
+        .slideshow-image:nth-child(2) {
+            background-image: url('02slide-home.jpg');
+            animation-delay: 6s;
+        }
+        .slideshow-image:nth-child(3) {
+            background-image: url('03slide-home.jpg');
+            animation-delay: 12s;
+        }
+        .slideshow-image:nth-child(4) {
+            background-image: url('04slide-home.jpg');
+            animation-delay: 18s;
+        }
+        .slideshow-image:nth-child(5) {
+            background-image: url('05slide-home.jpg');
+            animation-delay: 24s;
+        }
+        .slideshow-image:nth-child(6) {
+            background-image: url('06slide-home.jpg');
+            animation-delay: 30s;
+        }
+        
+        @keyframes imageAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+            5% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            15% {
+                opacity: 1;
+            }
+            20% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Countdown styles */
+        .countdown-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 50;
+            background: rgba(60, 36, 20, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown-title {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #D4AF37;
+            font-weight: 500;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .countdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 50px;
+        }
+        
+        .countdown-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #F5F5DC;
+        }
+        
+        .countdown-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #D4AF37;
+        }
     </style>
 </head>
 
 <body class="font-sans text-dark-text bg-beige antialiased overflow-hidden">
+    
+    <!-- NEW: Background slideshow -->
+    <div class="slideshow">
+        <div class="slideshow-image"></div>
+        <div class="slideshow-image"></div>
+        <div class="slideshow-image"></div>
+        <div class="slideshow-image"></div>
+        <div class="slideshow-image"></div>
+        <div class="slideshow-image"></div>
+    </div>
+    
+    <!-- NEW: Countdown to 18:15 -->
+    <div class="countdown-container">
+        <div class="countdown-title">NEXT EVENT STARTS IN</div>
+        <div class="countdown-timer">
+            <div class="countdown-unit">
+                <span id="countdown-hours" class="countdown-value">00</span>
+                <span class="countdown-label">HOURS</span>
+            </div>
+            <div class="countdown-unit">
+                <span id="countdown-minutes" class="countdown-value">00</span>
+                <span class="countdown-label">MINUTES</span>
+            </div>
+            <div class="countdown-unit">
+                <span id="countdown-seconds" class="countdown-value">00</span>
+                <span class="countdown-label">SECONDS</span>
+            </div>
+        </div>
+    </div>
     
     <div class="infinite-container pattern-dots">
         <div class="scroll-content">
@@ -246,22 +392,22 @@
                                 <div class="carousel-container rounded-2xl shadow-lg">
                                     <div class="carousel-track" id="carouselTrack">
                                         <div class="carousel-item">
-                                            <img src="https://via.placeholder.com/600x400/8B4513/FFFFFF?text=Pio+Cesare+Winery+1" alt="Pio Cesare Winery 1" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="01slide-home.jpg" alt="Pio Cesare Winery 1" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="https://via.placeholder.com/600x400/800020/FFFFFF?text=Pio+Cesare+Winery+2" alt="Pio Cesare Winery 2" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="02slide-home.jpg" alt="Pio Cesare Winery 2" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="https://via.placeholder.com/600x400/3C2414/FFFFFF?text=Pio+Cesare+Winery+3" alt="Pio Cesare Winery 3" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="03slide-home.jpg" alt="Pio Cesare Winery 3" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="https://via.placeholder.com/600x400/D4AF37/000000?text=Pio+Cesare+Winery+4" alt="Pio Cesare Winery 4" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="04slide-home.jpg" alt="Pio Cesare Winery 4" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="https://via.placeholder.com/600x400/B87333/FFFFFF?text=Pio+Cesare+Winery+5" alt="Pio Cesare Winery 5" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="05slide-home.jpg" alt="Pio Cesare Winery 5" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="https://via.placeholder.com/600x400/F5F5DC/000000?text=Pio+Cesare+Winery+6" alt="Pio Cesare Winery 6" class="w-full h-auto object-cover rounded-2xl">
+                                            <img src="06slide-home.jpg" alt="Pio Cesare Winery 6" class="w-full h-auto object-cover rounded-2xl">
                                         </div>
                                     </div>
                                     
@@ -400,6 +546,36 @@
             startAutoSlide();
             console.log('Auto-slide resumed');
         });
+        
+        // NEW: Countdown to 18:15
+        function updateCountdown() {
+            const now = new Date();
+            const target = new Date();
+            
+            // Set target time to 18:15 (6:15 PM)
+            target.setHours(18, 15, 0, 0);
+            
+            // If it's already past 18:15 today, set target to tomorrow
+            if (now > target) {
+                target.setDate(target.getDate() + 1);
+            }
+            
+            const diff = target - now;
+            
+            // Calculate hours, minutes, seconds
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Update the countdown display
+            document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Initialize and update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
     </script>
 </body>
 </html>
