@@ -67,11 +67,11 @@
                         },
                         fadeOut: {
                             '0%': { opacity: '1' },
-                            '100%': { opacity: '0', display: 'none' }
+                            '100%': { opacity: '0' } /* Rimosso display: none */
                         }
                     },
                     backgroundImage: {
-                        'hero-gradient': 'linear-gradient(135deg, rgba(60, 36, 20, 0.95) 0%, rgba(139, 69, 19, 0.9) 50%, rgba(128, 0, 32, 0.95) 100%)',
+                        'hero-gradient': 'linear-gradient(135deg, rgba(60, 36, 20, 0.45) 0%, rgba(139, 69, 19, 0.9) 50%, rgba(128, 0, 32, 0.45) 100%)',
                     },
                 }
             }
@@ -130,8 +130,8 @@
         }
         
         .scroll-content {
-            height: 300%; /* Three times the viewport height to accommodate two sections plus buffer */
-            /* animation: infiniteScroll 30s linear infinite; */ /* Temporarily disabled for testing */
+            height: 300%;
+            /* animation: infiniteScroll 30s linear infinite; */
         }
         
         .scroll-content:hover {
@@ -139,7 +139,7 @@
         }
         
         .section-wrapper {
-            height: 33.333%; /* Each section takes 1/3 of the total height */
+            height: 33.333%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -306,7 +306,6 @@
 
 <body class="font-sans text-dark-text bg-beige antialiased overflow-hidden">
     
-    <!-- NEW: Background slideshow -->
     <div class="slideshow">
         <div class="slideshow-image"></div>
         <div class="slideshow-image"></div>
@@ -316,9 +315,8 @@
         <div class="slideshow-image"></div>
     </div>
     
-    <!-- NEW: Countdown to 18:15 -->
     <div class="countdown-container" id="countdown">
-        <div class="countdown-title">NEXT EVENT STARTS IN</div>
+        <div class="countdown-title">EVENT STARTS IN</div>
         <div class="countdown-timer">
             <div class="countdown-unit">
                 <span id="countdown-hours" class="countdown-value">00</span>
@@ -338,7 +336,6 @@
     <div class="infinite-container pattern-dots">
         <div class="scroll-content">
             
-            <!-- Hero Section -->
             <div class="section-wrapper hero-section text-white relative overflow-hidden">
                 <div class="absolute inset-0 pointer-events-none">
                     <div class="absolute top-20 left-10 w-2 h-2 bg-primary-gold/30 rounded-full animate-float"></div>
@@ -363,7 +360,6 @@
                 </div>
             </div>
 
-            <!-- Pio Cesare Section -->
             <div class="section-wrapper pio-section text-white relative overflow-hidden">
                 <div class="absolute inset-0 pattern-dots opacity-20"></div>
                 
@@ -378,11 +374,11 @@
                         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                             <div class="space-y-6 animate-slide-in-left">
                                 <p class="text-lg lg:text-xl leading-relaxed opacity-90">
-                                    Cesare Benvenuto, from the historic Pio Cesare winery, will take you on an 
+                                    Cesare Benvenuto, from the historic Pio Cesare winery, will take you on an  
                                     unforgettable journey through his families prestigious wines.
                                 </p>
                                 <p class="text-lg lg:text-xl leading-relaxed opacity-90">
-                                    Experience the authentic flavors of Alba through perfect pairings crafted 
+                                    Experience the authentic flavors of Alba through perfect pairings crafted  
                                     by Culinary Director Riccardo Longo, featuring the prized Alba truffle.
                                 </p>
                                 
@@ -421,7 +417,6 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Navigation buttons -->
                                     <div class="carousel-nav absolute inset-y-0 flex items-center justify-between w-full px-4">
                                         <button onclick="prevSlide()" class="p-2 bg-white/30 rounded-full text-white backdrop-blur-sm hover:bg-white/50">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -435,7 +430,6 @@
                                         </button>
                                     </div>
                                     
-                                    <!-- Slideshow indicator dots -->
                                     <div class="slideshow-dots" id="slideshowDots">
                                         <div class="slideshow-dot active" onclick="goToSlide(0)"></div>
                                         <div class="slideshow-dot" onclick="goToSlide(1)"></div>
@@ -451,7 +445,6 @@
                 </div>
             </div>
 
-            <!-- Duplicate Hero Section for seamless loop -->
             <div class="section-wrapper hero-section text-white relative overflow-hidden">
                 <div class="absolute inset-0 pointer-events-none">
                     <div class="absolute top-20 left-10 w-2 h-2 bg-primary-gold/30 rounded-full animate-float"></div>
@@ -558,6 +551,15 @@
         });
         
         // NEW: Countdown to 18:15 with fade-out functionality
+        const countdownElement = document.getElementById('countdown');
+        
+        // Listen for the end of the fade-out animation to hide the element permanently
+        countdownElement.addEventListener('animationend', (event) => {
+            if (event.animationName === 'fadeOut') {
+                countdownElement.style.display = 'none';
+            }
+        });
+
         function updateCountdown() {
             const now = new Date();
             const target = new Date();
@@ -567,15 +569,14 @@
             
             // If it's already past 18:15 today, set target to tomorrow
             if (now > target) {
-                target.setDate(target.getDate() + 1);
+                target.setDate(target.getDate() + 1);//change to 0
             }
             
             const diff = target - now;
             
             // Check if countdown has expired (less than 1 second remaining)
             if (diff <= 0) {
-                // Hide the countdown with animation
-                const countdownElement = document.getElementById('countdown');
+                // Add the fade-out class to start the animation
                 countdownElement.classList.add('countdown-expired');
                 
                 // Clear the interval to stop updating
